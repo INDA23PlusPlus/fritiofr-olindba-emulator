@@ -180,8 +180,8 @@ impl<'a> Lexer<'a> {
         let mut out = vec![];
         for i in 0..4 {
             let mut cur = 0;
-            for j in 0..5 {
-                if ((1 << (j + i * 5)) & num) != 0 {
+            for j in 0..8 {
+                if ((1 << (j + i * 8)) & num) != 0 {
                     cur += 1 << j;
                 }
             }

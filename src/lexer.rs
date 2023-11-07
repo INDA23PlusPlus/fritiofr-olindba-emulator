@@ -36,6 +36,9 @@ impl<'a> Lexer<'a> {
                 },
                 _ => {
                     if token.len() == 0 {
+                        continue;
+                    }
+                    if token == "EOF" {
                         break;
                     }
                     if token.chars().nth(0).unwrap() == '.' {
@@ -72,6 +75,9 @@ impl<'a> Lexer<'a> {
                 "cnd" => {
                     out.push(consts::CND);
                 },
+                "mov" => {
+                    out.push(consts::MOV);
+                }
                 "jmp" => {
                     out.push(consts::JMP);
                     let jump_to = self.next_token();
@@ -139,11 +145,11 @@ impl<'a> Lexer<'a> {
                     out.push(consts::FX);
                 },
                 _ => { 
-                    if token.len() == 0 {
-                        break;
-                    }
-                    if token.chars().nth(0).unwrap() == '.' {
+                    if token.len() == 0 || token.chars().nth(0).unwrap() == '.' {
                         continue;
+                    }
+                    if token == "EOF" {
+                        break;
                     }
                     out.push(2);
                     let num = token.parse::<usize>().unwrap();
@@ -165,7 +171,7 @@ impl<'a> Lexer<'a> {
                 string.push(c);
             }
             else {
-                return string;
+                return "EOF".to_string();
             }
         }
     }

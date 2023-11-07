@@ -5,17 +5,17 @@ use crate::consts;
 pub struct Lexer<'a> {
     chars: &'a str,
     cur_ind: usize,
-    jumps: HashMap<String, u8>
+    jumps: HashMap<String, u8>,
 }
 
 impl<'a> Lexer<'a> {
     pub fn new(text_inp: &str) -> Lexer {
         let mut jumps = HashMap::new();
 
-        Lexer{
+        Lexer {
             chars: text_inp,
             cur_ind: 0,
-            jumps
+            jumps,
         }
     }
 
@@ -26,14 +26,14 @@ impl<'a> Lexer<'a> {
             match token.as_str() {
                 "add" | "sub" | "mul" | "div" | "mov" | "cnd" => {
                     cur_ind += 1;
-                },
+                }
                 "jmp" | "jeq" | "jne" | "jgt" | "jlt" | "jge" | "jle" => {
                     cur_ind += 6;
                     self.next_token();
                 }
                 "ax" | "bx" | "cx" | "dx" | "ex" | "fx" => {
                     cur_ind += 2;
-                },
+                }
                 _ => {
                     if token.len() == 0 {
                         continue;
@@ -43,13 +43,11 @@ impl<'a> Lexer<'a> {
                     }
                     if token.chars().nth(0).unwrap() == '.' {
                         self.jumps.insert(token, cur_ind);
-                    }
-                    else {
+                    } else {
                         cur_ind += 5;
                     }
                 }
             }
-            
         }
     }
 
@@ -62,19 +60,19 @@ impl<'a> Lexer<'a> {
             match token.as_str() {
                 "add" => {
                     out.push(consts::ADD);
-                },
+                }
                 "sub" => {
                     out.push(consts::SUB);
-                },
+                }
                 "mul" => {
                     out.push(consts::MUL);
-                },
+                }
                 "div" => {
                     out.push(consts::DIV);
-                },
+                }
                 "cnd" => {
                     out.push(consts::CND);
-                },
+                }
                 "mov" => {
                     out.push(consts::MOV);
                 }
@@ -83,68 +81,68 @@ impl<'a> Lexer<'a> {
                     let jump_to = self.next_token();
                     out.push(2);
                     out.append(&mut self.parse_int(*self.jumps.get(&jump_to).unwrap() as usize));
-                },
+                }
                 "jeq" => {
                     out.push(consts::JEQ);
                     let jump_to = self.next_token();
                     out.push(2);
                     out.append(&mut self.parse_int(*self.jumps.get(&jump_to).unwrap() as usize));
-                },
+                }
                 "jne" => {
                     out.push(consts::JNE);
                     let jump_to = self.next_token();
                     out.push(2);
                     out.append(&mut self.parse_int(*self.jumps.get(&jump_to).unwrap() as usize));
-                },
+                }
                 "jgt" => {
                     out.push(consts::JGT);
                     let jump_to = self.next_token();
                     out.push(2);
                     out.append(&mut self.parse_int(*self.jumps.get(&jump_to).unwrap() as usize));
-                },
+                }
                 "jlt" => {
                     out.push(consts::JLT);
                     let jump_to = self.next_token();
                     out.push(2);
                     out.append(&mut self.parse_int(*self.jumps.get(&jump_to).unwrap() as usize));
-                },
+                }
                 "jge" => {
                     out.push(consts::JGE);
                     let jump_to = self.next_token();
                     out.push(2);
                     out.append(&mut self.parse_int(*self.jumps.get(&jump_to).unwrap() as usize));
-                },
+                }
                 "jle" => {
                     out.push(consts::JLE);
                     let jump_to = self.next_token();
                     out.push(2);
                     out.append(&mut self.parse_int(*self.jumps.get(&jump_to).unwrap() as usize));
-                },
+                }
                 "ax" => {
                     out.push(1);
                     out.push(consts::AX);
-                },
+                }
                 "bx" => {
                     out.push(1);
                     out.push(consts::BX);
-                },
+                }
                 "cx" => {
                     out.push(1);
                     out.push(consts::CX);
-                },
+                }
                 "dx" => {
                     out.push(1);
                     out.push(consts::DX);
-                },
+                }
                 "ex" => {
                     out.push(1);
                     out.push(consts::EX);
-                },
+                }
                 "fx" => {
                     out.push(1);
                     out.push(consts::FX);
-                },
-                _ => { 
+                }
+                _ => {
                     if token.len() == 0 || token.chars().nth(0).unwrap() == '.' {
                         continue;
                     }
@@ -156,7 +154,7 @@ impl<'a> Lexer<'a> {
                     out.append(&mut self.parse_int(num));
                 }
             };
-        }    
+        }
         out
     }
 
@@ -169,8 +167,7 @@ impl<'a> Lexer<'a> {
                     return string;
                 }
                 string.push(c);
-            }
-            else {
+            } else {
                 return "EOF".to_string();
             }
         }
@@ -191,3 +188,4 @@ impl<'a> Lexer<'a> {
         out
     }
 }
+

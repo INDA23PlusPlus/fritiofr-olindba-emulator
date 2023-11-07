@@ -1,4 +1,4 @@
 fn main() {
-    emulator::TEST;
+    emulator::WORLD_HELLO;
     println!("Hello, world!");
 }

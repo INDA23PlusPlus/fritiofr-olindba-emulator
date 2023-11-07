@@ -1,1 +1,1 @@
-pub const TEST: u8 = 30;
+pub mod consts;
